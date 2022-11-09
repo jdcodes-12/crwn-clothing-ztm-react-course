@@ -1,4 +1,5 @@
 import React from 'react';
+import { Outlet } from 'react-router-dom';
 import CategoryMenu from '../components/CategoryMenu.component';
 
 const HomeRoute = () =>  {
@@ -12,7 +13,10 @@ const HomeRoute = () =>  {
   ];
 
   return (
-    <CategoryMenu collections={collections} />
+    <>
+      <CategoryMenu collections={collections} />
+      <Outlet />
+    </>
   );
 }
 
