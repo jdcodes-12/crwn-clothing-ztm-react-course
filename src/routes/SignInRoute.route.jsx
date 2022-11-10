@@ -1,5 +1,5 @@
 import React from 'react';
-import { signInWithGooglePopUp } from '../utils/firebase/firebase.utils';
+import { signInWithGooglePopUp } from '../utils/firebase/auth/auth.utils.js';
 
 const SignInRoute = () => {
 
