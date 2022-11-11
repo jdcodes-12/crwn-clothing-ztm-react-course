@@ -7,7 +7,8 @@ import {
   createUserDocumentFromAuth,
  } from '../utils/firebase/firebase.config.utils';
 
- import SignUpForm from '../components/SignUpForm.component';
+ import SignUpForm from '../components/forms/SignUpForm.component';
+ import SignInForm from '../components/forms/SignInForm.component';
 
 const SignInRoute = () => {
 
@@ -28,6 +29,7 @@ const SignInRoute = () => {
         Sign in with Google
       </button>
       <SignUpForm />
+      <SignInForm />
     </div>
   );
 }
