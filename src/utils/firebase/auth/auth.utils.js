@@ -20,10 +20,11 @@ export const auth = getAuth();
 
 // setup the Google provider
 const googleProvider = new GoogleAuthProvider();
-  googleProvider.setCustomParameters({
+
+googleProvider.setCustomParameters({
   prompt: 'select_account',
 });
 
 // create function with better naming to be easier to 
 // know which providers are using firebase auth's signInWithPop() method
-export const signInWithGooglePopUp = () => signInWithPopup(auth, googleProvider);
+export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider);

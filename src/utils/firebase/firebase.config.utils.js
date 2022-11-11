@@ -1,5 +1,14 @@
 import { initializeApp } from 'firebase/app';
 
+import {
+  getAuth,
+  signInWithRedirect,
+  signInWithPopup,
+  GoogleAuthProvider,
+} from 'firebase/auth';
+
+import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
+
 const firebaseConfig = {
   apiKey: "AIzaSyCut9TGXIiH_arARrbAD3lXxtnINHjTecE",
   authDomain: "crwn-clothing-ztm-db-7d6e5.firebaseapp.com",
@@ -9,4 +18,44 @@ const firebaseConfig = {
   appId: "1:1057174446646:web:b1f6967e79777c45cf6e97"
 };
 
-export const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+
+const googleProvider = new GoogleAuthProvider();
+
+googleProvider.setCustomParameters({
+  prompt: 'select_account',
+});
+
+// Auth is only validation for the site.
+// It keeps track of our site when we leave 
+// and come back to the browser
+export const auth = getAuth();
+export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider);
+export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googleProvider);
+
+export const db = getFirestore();
+
+export const createUserDocumentFromAuth = async (userAuth) => {
+  const userDocRef = doc(db, 'users', userAuth.uid);
+
+  const userSnapshot = await getDoc(userDocRef);
+
+  if (!userSnapshot.exists()) {
+    const { displayName, email } = userAuth;
+    const createdAt = new Date();
+
+    try {
+      await setDoc(userDocRef, {
+        displayName,
+        email,
+        createdAt,
+      });
+    } catch (error) {
+      console.log('error creating the user', error.message);
+    }
+  }
+
+  return userDocRef;
+};
+
+
