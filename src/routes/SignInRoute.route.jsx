@@ -1,10 +1,13 @@
 import React, { useEffect } from 'react';
+
 import { 
   auth,
   signInWithGoogleRedirect,
   signInWithGooglePopup, 
   createUserDocumentFromAuth,
  } from '../utils/firebase/firebase.config.utils';
+
+ import SignUpForm from '../components/SignUpForm.component';
 
 const SignInRoute = () => {
 
@@ -24,6 +27,7 @@ const SignInRoute = () => {
       <button onClick={authorizeGoogleUser}>
         Sign in with Google
       </button>
+      <SignUpForm />
     </div>
   );
 }
