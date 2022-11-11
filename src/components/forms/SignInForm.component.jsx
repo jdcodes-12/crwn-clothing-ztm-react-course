@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 
 import { 
-  createAuthUserWithEmailAndPassword, 
-  createUserDocumentFromAuth 
+  createUserDocumentFromAuth,
+  signInAuthUserWithEmailAndPassword,
+  signInWithGooglePopup,
 } from '../../utils/firebase/firebase.config.utils';
 
-import FormInput from './inputs/FormInput.component';
+import FormInput from '../forms/inputs/FormInput.component';
 import Button from '../buttons/Button.component';
+
+import '../../styles/sign-in-form.styles.scss';
 
 const defaultFormFields = {
   email: '',
@@ -25,6 +28,14 @@ const SignInForm = () => {
     setFormFields(defaultFormFields);
   }
 
+  // Helper function to sign in a user with Google
+  // then create a user documeent from that auth
+  // if not already created
+  const signInWithGoogle = async () => {
+    const { user } = await signInWithGooglePopup();
+    await createUserDocumentFromAuth(user);
+  }
+
   // Spread the frest of the formFields, then update `name`
   // with `value`. Genericizing the handler function.
   const handleChange = (event) => {
@@ -36,14 +47,28 @@ const SignInForm = () => {
     event.preventDefault();
 
     try {
-     
+
+     const response = await signInAuthUserWithEmailAndPassword(email, password);
+     console.log(response);
+     resetFormFields();
+
     } catch(error) {
-      console.error('Error during user creation', error);
+      
+      switch(error.code) {
+        case 'auth/wrong-password':
+          alert('No password is associated with that email. Try a new password.');
+          break;
+        case 'auth/user-not-found':
+          alert('No user is associated with that email. Try creating an account via sign up');
+          break;
+        default:
+          console.log(error);
+      }
     }
   }
 
   return (
-    <div>
+    <div className='sign-up-container'>
       <h2>Already have an account?</h2>
       <span>Sign in with email & password</span>
       <form onSubmit={handleSumbit}>
@@ -61,11 +86,15 @@ const SignInForm = () => {
                     required
                     onChange={handleChange}
                     />
+                    
        {/* submit triggers onSubmit */}
-       <Button type='submit'>Sign Up</Button>
+       <div className='buttons-container'>
+        <Button type='submit'>Sign Up</Button>
+        <Button type='button' buttonType='google' onClick={signInWithGoogle}>Google Sign In</Button>
+       </div>
       </form>
     </div>
-  )
+  );
 }
 
 export default SignInForm;
