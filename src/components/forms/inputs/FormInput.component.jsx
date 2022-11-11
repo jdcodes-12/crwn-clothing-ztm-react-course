@@ -8,19 +8,23 @@ import '../../../styles/form-input.styles.scss';
  * make sure the inputs get their correct
  * attributes.
  */
-const FormInput= ({ label, name, ...otherProps }) => {
-  return (
-    <div className='group'>
-      <input className='form-input' {...otherProps} />
-      {label &&  
-        <label  htmlFor={name} 
-                className={
-                `${otherProps.value.length ? 'shrink' : ''} 
-                  form-input-label`}>
-          {label}
-      </label>}
-    </div>
-  );
-}
 
-export default FormInput;
+ const FormInput = ({ label, ...otherProps }) => {
+   return (
+     <div className='group'>
+       <input className='form-input' {...otherProps} />
+       {label && (
+         <label
+           className={`${
+             otherProps.value.length ? 'shrink' : ''
+           } form-input-label`}
+         >
+           {label}
+         </label>
+       )}
+     </div>
+   );
+ };
+ 
+ export default FormInput;
+ 
