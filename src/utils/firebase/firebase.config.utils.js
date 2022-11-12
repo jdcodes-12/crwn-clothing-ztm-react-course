@@ -77,4 +77,20 @@ export const signInAuthUserWithEmailAndPassword = async (email, password) => {
 
 export const signOutUser = async () => await signOut(auth);
 
-export const onAuthStateChangedListener = (callback) => onAuthStateChanged(auth, callback)
+/** 
+ * `Observer Pattern`
+ * 
+ *  Listener Object
+ * {
+ *  next: callback to do for next thing in stream
+ *  error: callback to do on error in stream
+ *  complete: calleback to call when stream is closed/finished
+ * }
+*/
+export const onAuthStateChangedListener = (callback) => 
+  onAuthStateChanged(
+    auth, 
+    callback, 
+    (error) => console.log(`error: ${error}`),
+    () => console.log('completed stream. closing now.'),
+  );
