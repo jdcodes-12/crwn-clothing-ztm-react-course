@@ -9,18 +9,7 @@ import '../../styles/navbar.styles.scss';
 
 const Navbar = () => {
 
-  // Destructure the currentUser from UserContextProvider's
-  // `valueObj`.
-  const { currentUser, setCurrentUser } = useContext(UserContext);
-  // console.log(currentUser); 
-
-
-  // modifying a state, which is in UserProvider, that isn't local to Navbar component;
-  // set back currentUser to null to trigger conditional rendering of Navbar
-  const signOutHandler = async (currentUser) => {
-    await signOutUser(currentUser);
-    setCurrentUser(null); 
-  }
+  const { currentUser } = useContext(UserContext);
 
   return (
     <>
@@ -34,7 +23,7 @@ const Navbar = () => {
           <Link className='nav-link' to='/shop'>SHOP</Link>
           {
             currentUser ? 
-              ( <span className="nav-link" onClick={signOutHandler}>SIGN OUT</span> )
+              ( <span className="nav-link" onClick={signOutUser}>SIGN OUT</span> )
             : ( <Link className='nav-link' to='/auth'>SIGN IN</Link> )
           }
         </div>

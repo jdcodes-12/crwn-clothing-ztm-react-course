@@ -1,4 +1,5 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
+import { onAuthStateChangedListener , createUserDocumentFromAuth } from '../utils/firebase/firebase.config.utils';
 
 /**
  *  Changes to context's state will rerender the component.
@@ -27,6 +28,19 @@ export const UserProvider = ({ children }) => {
   // Create values that the children can access to modify this
   // context's state. Done through the valueObj.
   const valueObj = { currentUser, setCurrentUser };
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChangedListener((user) => {
+      console.log(user);
+      
+      if (user) {
+        createUserDocumentFromAuth(user)
+      }
+      setCurrentUser(user);
+    })
+
+    return unsubscribe;
+  }, []);
 
   return ( 
     <UserContext.Provider value={valueObj}>
