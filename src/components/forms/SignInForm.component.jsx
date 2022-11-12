@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { UserContext } from '../../contexts/user.context';
 
 import { 
   createUserDocumentFromAuth,
@@ -16,13 +17,16 @@ const defaultFormFields = {
   password: '',
 };
 
-
 const SignInForm = () => {
 
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { email, password } = formFields;
 
-  console.log(formFields);
+  // console.log(formFields);
+
+  // Destructure setCurrentUser back from UserContextProvider's
+  // `valueObj`.
+  const { setCurrentUser } = useContext(UserContext);
 
   const resetFormFields = () => {
     setFormFields(defaultFormFields);
@@ -34,6 +38,7 @@ const SignInForm = () => {
   const signInWithGoogle = async () => {
     const { user } = await signInWithGooglePopup();
     await createUserDocumentFromAuth(user);
+    setCurrentUser(user);
   }
 
   // Spread the frest of the formFields, then update `name`
@@ -47,9 +52,9 @@ const SignInForm = () => {
     event.preventDefault();
 
     try {
-
-     const response = await signInAuthUserWithEmailAndPassword(email, password);
-     console.log(response);
+      
+     const { user } = await signInAuthUserWithEmailAndPassword(email, password);
+     setCurrentUser(user);
      resetFormFields();
 
     } catch(error) {

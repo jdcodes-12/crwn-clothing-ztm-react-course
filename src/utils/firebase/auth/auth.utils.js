@@ -1,8 +1,8 @@
 import { 
     getAuth, 
-    signInWithRedirect,
     signInWithPopup,
     GoogleAuthProvider,
+    signOut,
   } from 'firebase/auth';
 
 /**
@@ -28,3 +28,5 @@ googleProvider.setCustomParameters({
 // create function with better naming to be easier to 
 // know which providers are using firebase auth's signInWithPop() method
 export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider);
+
+export const signOutUser = () => signOut(auth);
