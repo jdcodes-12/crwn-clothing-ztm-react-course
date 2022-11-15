@@ -1,8 +1,21 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { ProductsContext } from '../contexts/products.context';
 
 const ShopRoute = () => {
+  
+  // Pull products from ProductsContext
+  const { products } = useContext(ProductsContext);
+
   return (
-    <div>I am the Shop Route</div>
+    <div>
+     {
+      products.map(({id, name}) => 
+        <div key={id}>
+          <h1>{name}</h1>
+        </div>
+      )
+     }
+    </div>
   );
 }
 
