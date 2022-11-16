@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 
 import { BrowserRouter } from 'react-router-dom';
 import { UserProvider } from './contexts/user.context';
-import { ProductsProvider } from './contexts/products.context';
+import { CategoriesProvider } from './contexts/categories.context';
 import { CartProvider } from './contexts/cart.context';
 
 import App from './App';
@@ -15,18 +15,18 @@ import './index.scss';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 // Remember to go up to fetch contexts:
-// here ProductsProvider can reach into the user object
+// here CategoriesProvider can reach into the user object
 // User object cannot necessarily reach into the products provider
 root.render(
 
   <React.StrictMode>
     <BrowserRouter>
      <UserProvider>
-      <ProductsProvider>
+      <CategoriesProvider>
         <CartProvider>
           <App />
         </CartProvider>
-      </ProductsProvider>
+      </CategoriesProvider>
      </UserProvider>
     </BrowserRouter>
   </React.StrictMode>

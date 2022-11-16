@@ -1,20 +1,24 @@
 import React, { useContext } from 'react';
-import { ProductsContext } from '../contexts/products.context';
-import ProductCard from '../components/cards/ProductCard.component';
+
+import { CategoriesContext } from '../contexts/categories.context';
+
+import CategoryPreview from '../components/CategoryPreview.component';
+
 import '../styles/shop-layout.styles.scss';
 
 const ShopRoute = () => {
-  
-  // Pull products from ProductsContext
-  const { products } = useContext(ProductsContext);
+
+  // Pull products from CategoriesContext
+  const { categoriesMap } = useContext(CategoriesContext);
 
   return (
-    <div className='shop-grid'>
-     {
-      products.map((product) => 
-        <ProductCard key={product.id} product={product}/>
-      )
-     }
+    <div className='shop-container'>
+      {
+        Object.keys(categoriesMap).map((key) => {
+          const products = categoriesMap[key];
+          return <CategoryPreview key={key} title={key} products={products} />;
+        })
+      }
     </div>
   );
 }

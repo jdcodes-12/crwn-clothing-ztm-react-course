@@ -11,7 +11,16 @@ import {
   onAuthStateChanged,
 } from 'firebase/auth';
 
-import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
+import { 
+  getFirestore, 
+  doc, 
+  getDoc, 
+  setDoc, 
+  writeBatch,
+  collection,
+  query,
+  getDocs,
+} from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCut9TGXIiH_arARrbAD3lXxtnINHjTecE",
@@ -38,6 +47,40 @@ export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider)
 export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googleProvider);
 
 export const db = getFirestore();
+
+export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
+  const collectionReference = collection(db, collectionKey);
+  const wBatch = writeBatch(db);
+
+  objectsToAdd.forEach((object) => {
+      const docReference = doc(collectionReference, object.title.toLowerCase());
+      wBatch.set(docReference, object);
+    }
+  );
+
+  // Fire off the batch write
+  await wBatch.commit();
+  console.log('Done writing.');
+}
+
+export const getCategoriesAndDocuments = async () => {
+  const collectionReference = collection(db, 'categories');
+  const queryOnCategories = query(collectionReference);
+
+  // Execute query, returns a QuerySnapshot<DocumentData>
+  const categoriesQuerySnapshot = await getDocs(queryOnCategories);
+  const catgoriesMap = 
+    categoriesQuerySnapshot
+      .docs
+      .reduce((obj, currentDocSnapshot) => {
+        // get all fields from the snapshot - returns as Object
+        const { title, items } = currentDocSnapshot.data();
+        obj[title.toLowerCase()] = items;
+        return obj;
+      }, {});
+      
+  return catgoriesMap;
+}
 
 export const createUserDocumentFromAuth = async (userAuth, additionalInfo = { displayName: ''}) => {
   if (!userAuth) return;
@@ -88,8 +131,7 @@ export const signOutUser = async () => await signOut(auth);
  * }
 */
 export const onAuthStateChangedListener = (callback) => 
-  onAuthStateChanged(
-    auth, 
+  onAuthStateChanged(auth, 
     callback, 
     (error) => console.log(`error: ${error}`),
     () => console.log('completed stream. closing now.'),
